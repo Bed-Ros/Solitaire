@@ -2,8 +2,6 @@ package solitaire
 
 import (
 	"Solitaire/basic"
-	"github.com/fatih/color"
-	"strings"
 )
 
 type Diagonal struct {
@@ -32,64 +30,27 @@ func NewDiagonal() Diagonal {
 }
 
 func (d Diagonal) Print() error {
-	blankLine13 := strings.Repeat(basic.BlankCell, 13)
-	desc := color.New(basic.DescColor)
-	_, err := desc.Println(blankLine13)
-	if err != nil {
-		return err
-	}
+	printer := basic.NewPrinter()
+	//Пустая строка
+	printer.Repeat(13).Blank().Ln()
+	//Основное поле со стаками
 	var index int
 	for {
-		_, err = desc.Print(basic.BlankCell)
-		if err != nil {
-			return err
-		}
+		printer.Blank()
 		stacksPrinted := false
 		for _, stack := range d.Stacks {
-			printed, err := stack.Print(index)
-			if printed {
-				stacksPrinted = printed
-			}
-			if err != nil {
-				return err
-			}
+			stacksPrinted = printer.Stack(stack, index) || stacksPrinted
 		}
-		_, err = desc.Print(basic.BlankCell)
-		if err != nil {
-			return err
-		}
-		printed, err := d.ReserveStack.Print(index)
-		if printed {
-			stacksPrinted = printed
-		}
-		if err != nil {
-			return err
-		}
-		_, err = desc.Println(basic.BlankCell)
-		if err != nil {
-			return err
-		}
+		printer.Blank()
+		stacksPrinted = printer.Stack(d.ReserveStack, index) || stacksPrinted
+		printer.Blank().Ln()
 		index++
 		if !stacksPrinted {
 			break
 		}
 	}
-	blankLine11 := strings.Repeat(basic.BlankCell, 11)
-	_, err = desc.Print(blankLine11)
-	if err != nil {
-		return err
-	}
-	err = d.Deck.Print()
-	if err != nil {
-		return err
-	}
-	_, err = desc.Println(basic.BlankCell)
-	if err != nil {
-		return err
-	}
-	_, err = desc.Println(blankLine13)
-	if err != nil {
-		return err
-	}
-	return nil
+	//Строка с колодой
+	printer.Repeat(11).Blank().Deck(d.Deck).Blank().Ln()
+	//Пустая строка
+	return printer.Repeat(13).Blank().Ln().Error()
 }

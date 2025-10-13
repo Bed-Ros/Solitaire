@@ -1,16 +1,8 @@
 package basic
 
-import (
-	"github.com/fatih/color"
-)
-
 const (
-	DescColor     = color.BgGreen
-	BackColor     = color.BgWhite
-	BackFontColor = color.FgBlue
-	EmptyColor    = color.BgBlack
-
-	BlankCell = "  "
+	Red = 1 + iota
+	Black
 )
 
 var (
@@ -29,11 +21,16 @@ var (
 	King  = Rank{Symbol: 'K', Value: 13}
 	Joker = Rank{Symbol: 'J', Value: 14}
 
-	Hearts   = Suit{Symbol: '♥', Color: color.FgRed}
-	Diamonds = Suit{Symbol: '♦', Color: color.FgRed}
-	Clubs    = Suit{Symbol: '♣', Color: color.FgBlack}
-	Spades   = Suit{Symbol: '♠', Color: color.FgBlack}
+	Hearts   = Suit{Symbol: '♥', Color: Red}
+	Diamonds = Suit{Symbol: '♦', Color: Red}
+	Clubs    = Suit{Symbol: '♣', Color: Black}
+	Spades   = Suit{Symbol: '♠', Color: Black}
+
+	RedJoker   = Suit{Symbol: 'J', Color: Red}
+	BlackJoker = Suit{Symbol: 'J', Color: Black}
 )
+
+type Color int
 
 type Rank struct {
 	Symbol rune
@@ -42,21 +39,11 @@ type Rank struct {
 
 type Suit struct {
 	Symbol rune
-	Color  color.Attribute
+	Color  Color
 }
 
 type Card struct {
 	Suit Suit
 	Rank Rank
 	Open bool
-}
-
-func (c Card) String() string {
-	if c.Open {
-		decorator := color.New(c.Suit.Color)
-		return decorator.Sprintf("%c%c", c.Suit.Symbol, c.Rank.Symbol)
-	} else {
-		decorator := color.New(BackColor)
-		return decorator.Sprint("  ")
-	}
 }

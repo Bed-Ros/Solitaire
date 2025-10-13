@@ -8,7 +8,10 @@ import (
 
 func main() {
 	q := solitaire.NewDiagonal()
-	q.Print()
+	err := q.Print()
+	if err != nil {
+		panic(err)
+	}
 	input := bufio.NewScanner(os.Stdin)
 	input.Scan()
 }
