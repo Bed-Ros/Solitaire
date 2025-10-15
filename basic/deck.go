@@ -6,6 +6,19 @@ import (
 
 type Stack []Card
 
+func (s Stack) IsPerfectlySorted() bool {
+	if len(s) <= 1 {
+		return true
+	}
+	curSuit := s[0].Suit
+	for i := 1; i < len(s); i++ {
+		if curSuit != s[i].Suit || s[i-1].Rank.Value-1 != s[i].Rank.Value {
+			return false
+		}
+	}
+	return true
+}
+
 type Deck []Card
 
 func (d *Deck) Shuffle() {
