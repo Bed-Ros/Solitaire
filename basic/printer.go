@@ -108,12 +108,12 @@ func (p *Printer) Deck(deck Deck) *Printer {
 }
 
 func (p *Printer) Stack(stack Stack, index int) bool {
-	if index == 0 && len(stack) == 0 {
+	if index == 0 && stack.Cards == nil {
 		p.Empty()
 		return true
 	}
-	if index < len(stack) {
-		p.Card(stack[index])
+	if index < len(stack.Cards) {
+		p.Card(stack.Cards[index])
 		return true
 	}
 	p.Blank()
